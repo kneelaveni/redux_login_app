@@ -4,24 +4,24 @@ import { authActions } from '../store';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { logoutInitiate } from '../store/Actions';
 const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const timeoutId = useSelector((state) => state.auth.timeoutId);
-  const [islogin ,setIslogin] = useState(false);
+
+
   const logoutHandler = () => {
-    // dispatch(authActions.logout());
-    setIslogin(true);
-    navigate('/')
+      dispatch(logoutInitiate());
+      navigate('/')
   };
 
   const handleUserInteraction = () => {
     clearTimeout(timeoutId);
     const newTimeoutId = setTimeout(() => {
-      // dispatch(authActions.logout());
-      setIslogin(true);
+      dispatch(logoutInitiate());
       navigate('/')
       
     }, 60* 60 * 1000); // 60 minutes * 60 seconds * 1000 milliseconds
@@ -43,7 +43,7 @@ const Header = () => {
   return (
     <header className={classes.header}>
       <h1>Redux Auth</h1>
-       {location.pathname === '/dashboard' && !islogin ? (<nav>
+       {location.pathname === '/dashboard' ? (<nav>
           <ul>
             <li>
               <a href='#'>My Products</a>
